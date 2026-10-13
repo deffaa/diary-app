@@ -5,10 +5,10 @@ import { COLORS, SPACE, RADIUS, TYPO } from '../styles/tokens';
 // Fungsi untuk menentukan warna berdasarkan jenis mood
 const getMoodColor = (mood) => {
   switch (mood?.toLowerCase()) {
-    case 'happy': return '#f59e0b'; // Kuning (Amber)
-    case 'sad': return '#64748b'; // Abu-abu (Slate)
+    case 'happy': return '#f59e0b'; // Kuning
+    case 'sad': return '#64748b'; // Abu-abu
     case 'focus': return '#3b82f6'; // Biru
-    case 'calm': return '#10b981'; // Hijau (Emerald)
+    case 'calm': return '#10b981'; // Hijau
     case 'excited': return '#ef4444'; // Merah
     default: return COLORS.muted;
   }
@@ -31,11 +31,12 @@ export default function DiaryCard({
       accessibilityLabel={`Entri ${title} tanggal ${date}`}
     >
       <Image source={{ uri: moodUri }} style={styles.mood} />
+      
       <View style={styles.content}>
         <Text style={styles.title} numberOfLines={1}>{title}</Text>
         <Text style={styles.date}>{date}</Text>
         
-        {/* Fitur Tambahan 1: Badge Mood */}
+        {/* Badge Mood Dinamis */}
         {moodType && (
           <View style={[styles.badge, { borderColor: moodColor }]}>
             <Text style={[styles.badgeText, { color: moodColor }]}>
@@ -64,7 +65,6 @@ const styles = StyleSheet.create({
   title: { fontSize: TYPO.title, fontWeight: '700', color: COLORS.text },
   date: { fontSize: TYPO.caption, color: COLORS.muted, marginBottom: 4 },
   preview: { fontSize: TYPO.body, color: COLORS.text, marginTop: SPACE.s },
-  // Styling untuk Badge
   badge: {
     alignSelf: 'flex-start',
     borderWidth: 1,

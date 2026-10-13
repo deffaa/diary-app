@@ -4,12 +4,13 @@ import DiaryCard from '../components/DiaryCard';
 import DiaryDetailModal from '../components/DiaryDetailModal';
 import { COLORS, SPACE, TYPO, BREAKPOINTS, RADIUS } from '../styles/tokens';
 
+// Data dengan penambahan moodType
 const DATA = [
   {
     id: 1, title: 'Pagi yang Tenang', date: '2025-10-06',
     preview: 'Bangun lebih pagi...', body: 'Catatan lengkap tentang pagi yang tenang. Udara sejuk dan menyenangkan.',
     moodUri: 'https://picsum.photos/seed/happy/200', heroUri: 'https://picsum.photos/seed/happyhero/800/450',
-    moodType: 'Happy' // Penambahan data moodType
+    moodType: 'Happy' 
   },
   {
     id: 2, title: 'Produktif di Kampus', date: '2025-10-05',
@@ -37,7 +38,7 @@ const DATA = [
   },
 ];
 
-// Fitur Tambahan 3: Komponen Skeleton Loader
+// Komponen Skeleton Loader
 const SkeletonCard = ({ twoCols }) => (
   <View style={[styles.itemWrap, twoCols && styles.itemWrap2]}>
     <View style={styles.skeletonContainer}>
@@ -56,11 +57,10 @@ export default function DiaryListScreen() {
   const twoCols = width >= BREAKPOINTS.tablet;
   const [selected, setSelected] = useState(null);
   
-  // State untuk efek loading (Skeleton)
+  // State untuk efek loading selama 2 detik
   const [isLoading, setIsLoading] = useState(true);
   const keyForCols = useMemo(() => (twoCols ? 'grid2' : 'list1'), [twoCols]);
 
-  // Efek pura-pura loading selama 2 detik saat aplikasi pertama kali dibuka
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
     return () => clearTimeout(timer);
@@ -73,7 +73,7 @@ export default function DiaryListScreen() {
         date={item.date}
         preview={item.preview}
         moodUri={item.moodUri}
-        moodType={item.moodType} // Mengirim data ke DiaryCard
+        moodType={item.moodType} 
         variant={twoCols ? 'grid' : 'list'}
         onPress={() => setSelected(item)} 
       />
@@ -84,11 +84,11 @@ export default function DiaryListScreen() {
     <View style={styles.container}>
       <Text style={styles.header}>Buku Harian</Text>
 
-      {/* Jika Loading true, render Skeleton. Jika false, render FlatList data asli */}
       {isLoading ? (
+        // Tampilan saat loading (menampilkan 4 kotak dummy skeleton)
         <FlatList
           key={keyForCols}
-          data={['1', '2', '3', '4']} // Dummy array untuk 4 kotak loading
+          data={['1', '2', '3', '4']} 
           numColumns={twoCols ? 2 : 1}
           keyExtractor={(item) => item}
           renderItem={() => <SkeletonCard twoCols={twoCols} />}
@@ -96,6 +96,7 @@ export default function DiaryListScreen() {
           contentContainerStyle={{ padding: SPACE.l, gap: SPACE.m, paddingTop: SPACE.m }}
         />
       ) : (
+        // Tampilan data asli
         <FlatList
           key={keyForCols}
           data={DATA}
@@ -104,7 +105,7 @@ export default function DiaryListScreen() {
           renderItem={renderItem}
           columnWrapperStyle={twoCols ? { gap: SPACE.m } : undefined}
           contentContainerStyle={{ padding: SPACE.l, gap: SPACE.m, paddingTop: SPACE.m }}
-          // Fitur Tambahan 2: Empty State Informatif
+          // Tampilan Empty State jika isi array DATA kosong
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyIcon}>📭</Text>
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
   emptyTitle: { fontSize: 20, fontWeight: 'bold', color: COLORS.text, marginBottom: 8 },
   emptySubtitle: { fontSize: 14, color: COLORS.muted, textAlign: 'center', lineHeight: 22 },
 
-  // Styling Skeleton
+
   skeletonContainer: { flexDirection: 'row', gap: SPACE.m, padding: SPACE.m, borderWidth: 1, borderColor: '#f3f4f6', borderRadius: RADIUS.card, backgroundColor: '#f9fafb' },
   skeletonAvatar: { width: 64, height: 64, borderRadius: RADIUS.avatar, backgroundColor: '#e5e7eb' },
   skeletonContent: { flex: 1, justifyContent: 'center' },
