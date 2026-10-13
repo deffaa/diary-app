@@ -1,23 +1,23 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
+import { COLORS, SPACE, RADIUS, TYPO } from '../styles/tokens';
 
-export default function DiaryCard({ title, date, preview, imageSource, moodType }) {
-  
-  const getBorderColor = (mood) => {
-    switch (mood) {
-      case 'happy': return '#fde047'; 
-      case 'focus': return '#3b82f6'; 
-      case 'calm': return '#22c55e';  
-      case 'sad': return '#94a3b8';   
-      case 'excited': return '#ef4444'; 
-      default: return '#e5e7eb';      
-    }
-  };
-
+export default function DiaryCard({
+  title, date, preview, moodUri, onPress, variant = 'list'
+}) {
   return (
-    <View style={[styles.card, { borderColor: getBorderColor(moodType) }]}>
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.card,
+        variant === 'grid' && styles.cardGrid,
+        { opacity: pressed ? 0.85 : 1 }
+      ]}
+      accessible
+      accessibilityLabel={`Entri ${title} tanggal ${date}`}
+    >
       <Image 
-        source={imageSource}
+        source={{ uri: moodUri }} 
         style={styles.mood} 
       />
       <View style={styles.content}>
@@ -31,37 +31,46 @@ export default function DiaryCard({ title, date, preview, imageSource, moodType 
           {preview}
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    gap: 12,
-    padding: 12,
-    borderWidth: 2, 
-    borderRadius: 12,
-    marginBottom: 12,
+    gap: SPACE.m,
+    padding: SPACE.m,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.card,
+    backgroundColor: COLORS.surface,
+  },
+  cardGrid: {
+    flexDirection: 'column', 
+    alignItems: 'center',
+    textAlign: 'center',
   },
   mood: {
-    width: 64,
+    width: 64, 
     height: 64,
-    borderRadius: 32,
+    borderRadius: RADIUS.avatar,
+    backgroundColor: '#eef2ff',
   },
-  content: {
-    flex: 1,
+  content: { 
+    flex: 1 
   },
-  title: {
-    fontSize: 16,
-    fontWeight: '700',
+  title: { 
+    fontSize: TYPO.title, 
+    fontWeight: '700', 
+    color: COLORS.text 
   },
-  date: {
-    fontSize: 12,
-    color: '#6b7280',
-    marginBottom: 6,
+  date: { 
+    fontSize: TYPO.caption, 
+    color: COLORS.muted, 
+    marginBottom: 6 
   },
-  preview: {
-    fontSize: 14,
+  preview: { 
+    fontSize: TYPO.body, 
+    color: COLORS.text 
   },
 });
